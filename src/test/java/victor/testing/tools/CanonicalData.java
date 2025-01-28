@@ -11,20 +11,20 @@ import org.apache.commons.io.IOUtils;
 import java.io.InputStream;
 
 public class CanonicalData {
-  private static final Configuration CONFIG = Configuration.builder()
-      .jsonProvider(new JacksonJsonNodeJsonProvider())
-      .mappingProvider(new JacksonMappingProvider())
-      .build();
+    private static final Configuration CONFIG = Configuration.builder()
+            .jsonProvider(new JacksonJsonNodeJsonProvider())
+            .mappingProvider(new JacksonMappingProvider())
+            .build();
 
-  @SneakyThrows
-  public static DocumentContext load(String name) {
-    String fileNameInClasspath = "/canonical/" + name + ".json";
-    InputStream stream = CanonicalData.class.getResourceAsStream(fileNameInClasspath);
-    if (stream == null) {
-      throw new IllegalArgumentException("File not found: classpath:/" + fileNameInClasspath);
+    @SneakyThrows
+    public static DocumentContext load(String name) {
+        String fileNameInClasspath = "/canonical/" + name + ".json";
+        InputStream stream = CanonicalData.class.getResourceAsStream(fileNameInClasspath);
+        if (stream == null) {
+            throw new IllegalArgumentException("File not found: classpath:/" + fileNameInClasspath);
+        }
+        String originalJson = IOUtils.toString(stream);
+        return JsonPath.using(CONFIG)
+                .parse(originalJson);
     }
-    String originalJson = IOUtils.toString(stream);
-    return JsonPath.using(CONFIG)
-        .parse(originalJson);
-  }
 }

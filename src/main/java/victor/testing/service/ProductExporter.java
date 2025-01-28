@@ -17,45 +17,45 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 @Service
 @RequiredArgsConstructor
 public class ProductExporter {
-  private final ProductRepo productRepo;
+    private final ProductRepo productRepo;
 
-  public String export() throws IOException {
-    String fileName = "export-%s.csv".formatted(UUID.randomUUID());
-    try (FileWriter fileWriter = new FileWriter(fileName)) {
-      writeContent(fileWriter);
+    public String export() throws IOException {
+        String fileName = "export-%s.csv".formatted(UUID.randomUUID());
+        try (FileWriter fileWriter = new FileWriter(fileName)) {
+            writeContent(fileWriter);
+        }
+        return fileName;
     }
-    return fileName;
-  }
 
-  @VisibleForTesting
-  void writeContent(Writer writer) throws IOException {
-    writer.write("name;barcode;category;created_by;created_at\n");
-    for (Product product : productRepo.findAll()) {
-      writer.write(product.getName().toUpperCase());
-      writer.write(";");
-      writer.write(product.getBarcode());
-      writer.write(";");
-      writer.write(toExportCode(product.getCategory()));
-      writer.write(";");
-      if (product.getCreatedBy() != null) {
-        writer.write(product.getCreatedBy());
-      } else {
-        writer.write("SYSTEM");
-      }
-      writer.write(";");
-      writer.write(product.getCreatedDate().format(ofPattern("MM/dd/yyyy")));
-      writer.write("\n");
+    @VisibleForTesting
+    void writeContent(Writer writer) throws IOException {
+        writer.write("name;barcode;category;created_by;created_at\n");
+        for (Product product : productRepo.findAll()) {
+            writer.write(product.getName().toUpperCase());
+            writer.write(";");
+            writer.write(product.getBarcode());
+            writer.write(";");
+            writer.write(toExportCode(product.getCategory()));
+            writer.write(";");
+            if (product.getCreatedBy() != null) {
+                writer.write(product.getCreatedBy());
+            } else {
+                writer.write("SYSTEM");
+            }
+            writer.write(";");
+            writer.write(product.getCreatedDate().format(ofPattern("MM/dd/yyyy")));
+            writer.write("\n");
+        }
     }
-  }
 
-  private String toExportCode(ProductCategory e) {
-    return switch (e) {
-      case ELECTRONICS -> "E";
-      case KIDS -> "K";
-      case HOME -> "H";
+    private String toExportCode(ProductCategory e) {
+        return switch (e) {
+            case ELECTRONICS -> "E";
+            case KIDS -> "K";
+            case HOME -> "H";
 //      default -> "-";// PR reject illegal defaut if using the switch(enum) as expression
-      case UNCATEGORIZED -> "-";
-    };
-  }
+            case UNCATEGORIZED -> "-";
+        };
+    }
 
 }

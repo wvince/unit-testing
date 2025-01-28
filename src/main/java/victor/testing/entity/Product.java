@@ -1,18 +1,23 @@
 package victor.testing.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 
-import jakarta.persistence.*;
 import java.time.LocalDate;
 
 import static jakarta.persistence.EnumType.STRING;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @ToString
 public class Product {
 
@@ -46,7 +51,8 @@ public class Product {
         this.name = name;
     }
 
-    public Product() {}
+    public Product() {
+    }
 
 
 }

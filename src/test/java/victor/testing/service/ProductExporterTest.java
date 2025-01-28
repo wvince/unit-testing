@@ -28,41 +28,41 @@ import static org.mockito.Mockito.when;
 @Slf4j
 @ExtendWith(MockitoExtension.class)
 public class ProductExporterTest extends FileApprovalTestBase {
-  public static final ObjectMapper jackson = new ObjectMapper()
-      .registerModule(new JavaTimeModule())
-      .registerModule(new ParameterNamesModule(JsonCreator.Mode.PROPERTIES)) // allows to even remove default private constructor!
-      ;
-  @Mock
-  private ProductRepo personRepo;
+    public static final ObjectMapper jackson = new ObjectMapper()
+            .registerModule(new JavaTimeModule())
+            .registerModule(new ParameterNamesModule(JsonCreator.Mode.PROPERTIES)) // allows to even remove default private constructor!
+            ;
+    @Mock
+    private ProductRepo personRepo;
 
-  @InjectMocks
-  private ProductExporter exporter;
+    @InjectMocks
+    private ProductExporter exporter;
 
-  public static List<FileTestCase> testData() throws IOException {
-    Function<String, String> inToOutFileName = inputFileName -> inputFileName.replace(".in.json", ".out.csv");
-    return scanForFileTestCases("classpath:/test-cases/export/*.in.json", inToOutFileName);
-  }
+    public static List<FileTestCase> testData() throws IOException {
+        Function<String, String> inToOutFileName = inputFileName -> inputFileName.replace(".in.json", ".out.csv");
+        return scanForFileTestCases("classpath:/test-cases/export/*.in.json", inToOutFileName);
+    }
 
-  @ParameterizedTest(name = "{0}")
-  @MethodSource("testData")
-  public void convert(FileTestCase testCase) throws IOException {
-    didacticLog(testCase);
-    Product[] inputProduct = jackson.readValue(testCase.inputFile(), Product[].class);
-    when(personRepo.findAll()).thenReturn(asList(inputProduct));
-    StringWriter sw = new StringWriter();
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("testData")
+    public void convert(FileTestCase testCase) throws IOException {
+        didacticLog(testCase);
+        Product[] inputProduct = jackson.readValue(testCase.inputFile(), Product[].class);
+        when(personRepo.findAll()).thenReturn(asList(inputProduct));
+        StringWriter sw = new StringWriter();
 
-    // when
-    exporter.writeContent(sw);
+        // when
+        exporter.writeContent(sw);
 
-    String expectedContents = readFileToString(testCase.expectedOutputFile());
-    assertThat(sw.toString()).isEqualToNormalizingNewlines(expectedContents);
-  }
+        String expectedContents = readFileToString(testCase.expectedOutputFile());
+        assertThat(sw.toString()).isEqualToNormalizingNewlines(expectedContents);
+    }
 
-  private void didacticLog(FileTestCase testCase) throws IOException {
-    String inStr = readFileToString(testCase.inputFile());
-    String outStr = readFileToString(testCase.expectedOutputFile());
-    log.info("Running {}", testCase);
-    System.out.println("Running with input:\n" + inStr);
-    System.out.println("\nExpecting output:\n" + outStr);
-  }
+    private void didacticLog(FileTestCase testCase) throws IOException {
+        String inStr = readFileToString(testCase.inputFile());
+        String outStr = readFileToString(testCase.expectedOutputFile());
+        log.info("Running {}", testCase);
+        System.out.println("Running with input:\n" + inStr);
+        System.out.println("\nExpecting output:\n" + outStr);
+    }
 }

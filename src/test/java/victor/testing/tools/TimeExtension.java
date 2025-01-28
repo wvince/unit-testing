@@ -12,35 +12,36 @@ import java.time.LocalDate;
 // @RegisterExtension TimeExtension timeExtension = new TimeExtension("2019-09-29");
 
 
-
 public class TimeExtension implements InvocationInterceptor {
-	private LocalDate fixed;
+    private LocalDate fixed;
 
-  public TimeExtension(LocalDate fixed) {
-    this.fixed = fixed;
-  }
-  public TimeExtension(String fixed) {
-    this.fixed = LocalDate.parse(fixed);
-  }
-
-  @Override
-	public void interceptTestMethod(Invocation<Void> invocation, ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
-    try(var staticMock = Mockito.mockStatic(LocalDate.class, Mockito.CALLS_REAL_METHODS)) {
-      staticMock.when(LocalDate::now)
-          .thenAnswer(call -> fixed);
-
-      invocation.proceed(); // call the @Test method
+    public TimeExtension(LocalDate fixed) {
+        this.fixed = fixed;
     }
-	}
 
-  public void setDate(LocalDate date) {
-    fixed = date;
-  }
+    public TimeExtension(String fixed) {
+        this.fixed = LocalDate.parse(fixed);
+    }
+
+    @Override
+    public void interceptTestMethod(
+            Invocation<Void> invocation, ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
+        try (var staticMock = Mockito.mockStatic(LocalDate.class, Mockito.CALLS_REAL_METHODS)) {
+            staticMock.when(LocalDate::now)
+                    .thenAnswer(call -> fixed);
+
+            invocation.proceed(); // call the @Test method
+        }
+    }
+
+    public void setDate(LocalDate date) {
+        fixed = date;
+    }
 
 }
 
 class TimeFactory { // ~ Clock
-  public LocalDate today() {
-    return LocalDate.now();
-  }
+    public LocalDate today() {
+        return LocalDate.now();
+    }
 }

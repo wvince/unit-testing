@@ -9,12 +9,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Cucumber
 public class TennisScoreFeatureSteps {
-  @Autowired
-  private CucumberTennisContext context;
+    @Autowired
+    private CucumberTennisContext context;
 
-  @Then("Score is {string}")
-  public void the_score_is(String expectedScore) throws Throwable {
-    assertThat(context.getTennisScore().score()).isEqualTo(expectedScore);
-  }
+    @Then("Score is {string}")
+    public void the_score_is(String expectedScore) throws Throwable {
+        assertThat(context.getTennisScore().score()).isEqualTo(expectedScore);
+    }
 
 }

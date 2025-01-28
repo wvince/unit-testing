@@ -6,18 +6,18 @@ import victor.testing.entity.Address;
 import victor.testing.entity.Customer;
 
 public class TestData {
-  private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
-  @SneakyThrows
-  public static Customer aCustomerJson() {
-    return objectMapper.readValue(TestData.class.getResource("/canonical/customer.json"), Customer.class);
-  }
+    @SneakyThrows
+    public static Customer aCustomerJson() {
+        return objectMapper.readValue(TestData.class.getResource("/canonical/customer.json"), Customer.class);
+    }
 
-  static Customer aValidCustomerForEveryone() {
-    return new Customer()
-        .setName("::name::")
-        .setEmail("::email::")
-        .setAddress(new Address()
-            .setCity("::city::"));
-  }
+    static Customer aValidCustomerForEveryone() {
+        return new Customer()
+                .setName("::name::")
+                .setEmail("::email::")
+                .setAddress(new Address()
+                        .setCity("::city::"));
+    }
 }

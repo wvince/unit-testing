@@ -33,10 +33,11 @@ public class SpringApplication {
             builder.serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         };
     }
+
     public static void main(String[] args) {
         new SpringApplicationBuilder()
-            .profiles("insertDummyData")
-            .sources(SpringApplication.class).run(args);
+                .profiles("insertDummyData")
+                .sources(SpringApplication.class).run(args);
     }
 
     @Autowired

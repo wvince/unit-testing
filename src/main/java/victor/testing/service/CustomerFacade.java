@@ -13,27 +13,27 @@ import java.util.Set;
 
 @RequiredArgsConstructor
 public class CustomerFacade {
-   private final CustomerValidator customerValidator;
-   private final CustomerRepo customerRepo;
-   private final EmailClient emailClient;
+    private final CustomerValidator customerValidator;
+    private final CustomerRepo customerRepo;
+    private final EmailClient emailClient;
 
-   private static final List<Country> DISCOUNTED_COUNTRIES = List.of(Country.ROU, Country.BEL, Country.SRB);
+    private static final List<Country> DISCOUNTED_COUNTRIES = List.of(Country.ROU, Country.BEL, Country.SRB);
 
-   public Long createCustomer(Customer customer) {
-      customerValidator.validate(customer);
+    public Long createCustomer(Customer customer) {
+        customerValidator.validate(customer);
 
-      if (customerRepo.countByEmail(customer.getEmail()) != 0) {
-         throw new IllegalArgumentException("A customer with that email already exists");
-      }
+        if (customerRepo.countByEmail(customer.getEmail()) != 0) {
+            throw new IllegalArgumentException("A customer with that email already exists");
+        }
 
-      emailClient.sendWelcomeEmail(customer);
+        emailClient.sendWelcomeEmail(customer);
 
-      if (DISCOUNTED_COUNTRIES.contains(customer.getAddress().getCountry())) {
-         customer.getCoupons().add(new Coupon(ProductCategory.ELECTRONICS, 10, Set.of()));
-         customer.getCoupons().add(new Coupon(ProductCategory.HOME, 10, Set.of()));
-         emailClient.sendNewCouponEmail(customer);
-      }
+        if (DISCOUNTED_COUNTRIES.contains(customer.getAddress().getCountry())) {
+            customer.getCoupons().add(new Coupon(ProductCategory.ELECTRONICS, 10, Set.of()));
+            customer.getCoupons().add(new Coupon(ProductCategory.HOME, 10, Set.of()));
+            emailClient.sendNewCouponEmail(customer);
+        }
 
-      return customerRepo.save(customer).getId();
-   }
+        return customerRepo.save(customer).getId();
+    }
 }

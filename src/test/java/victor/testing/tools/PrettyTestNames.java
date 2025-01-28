@@ -24,8 +24,8 @@ public class PrettyTestNames extends DisplayNameGenerator.Standard {
 
     private String replaceCapitals(String name) {
         name = name.replaceAll("([A-Z])", " $1")
-                .replaceAll("_"," > ")
-                .replaceAll("\\s+"," ")
+                .replaceAll("_", " > ")
+                .replaceAll("\\s+", " ")
                 .toLowerCase();
         return name;
     }

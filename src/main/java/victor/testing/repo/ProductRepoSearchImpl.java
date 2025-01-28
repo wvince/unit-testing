@@ -1,13 +1,13 @@
 package victor.testing.repo;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
-import victor.testing.api.dto.ProductSearchResult;
 import victor.testing.api.dto.ProductSearchCriteria;
+import victor.testing.api.dto.ProductSearchResult;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

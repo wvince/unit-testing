@@ -17,9 +17,14 @@
 package victor.testing.tools;
 
 import org.hamcrest.Matcher;
-import org.junit.jupiter.api.extension.*;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
 import org.junit.jupiter.api.extension.ExtensionContext.Store;
+import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.ParameterResolver;
 import victor.testing.tools.CaptureSystemOutput.Extension;
 
 import java.io.ByteArrayOutputStream;
@@ -71,11 +76,11 @@ import static org.hamcrest.Matchers.allOf;
  * @author Phillip Webb
  * @author Andy Wilkinson
  */
-@Target({ TYPE, METHOD })
+@Target({TYPE, METHOD})
 @Retention(RUNTIME)
 @Documented
 @ExtendWith(Extension.class)
-public @interface   CaptureSystemOutput {
+public @interface CaptureSystemOutput {
 
 
     /**
@@ -105,8 +110,7 @@ public @interface   CaptureSystemOutput {
                     String output = outputCapture.toString();
                     assertThat(output, allOf(outputCapture.matchers));
                 }
-            }
-            finally {
+            } finally {
                 outputCapture.releaseOutput();
             }
         }
@@ -176,8 +180,7 @@ public @interface   CaptureSystemOutput {
             try {
                 this.captureOut.flush();
                 this.captureErr.flush();
-            }
-            catch (IOException ex) {
+            } catch (IOException ex) {
                 // ignore
             }
         }
